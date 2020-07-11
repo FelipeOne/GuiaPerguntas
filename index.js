@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
 const bodyparser = require("body-parser");
-const conexao = require("./database/database")
+const conexao = require("./database/database");
+const pergunta = require('./database/Pergunta');
+const Pergunta = require("./database/Pergunta");
 
 conexao
     .authenticate()
@@ -32,7 +34,13 @@ app.get("/perguntar", (req, res) =>{
 app.post("/salvarPergunta",(req, res) =>{
     var titulo = req.body.titulo;
     var descricao = req.body.descricao;
-    res.send("formulario Preenchido" + titulo);
+    
+    Pergunta.create({
+        titulo: titulo,
+        descricao: descricao
+    }).then(() => {
+        res.redirect("/");
+    });
 });
 
 app.listen(8080,() =>{
